@@ -1,22 +1,29 @@
 package auth
 
 import (
-	"fmt"
+	"log/slog"
+	"net/http"
 	"oblivion/pkg/utils/crypto"
 	"oblivion/pkg/crud"
 	"github.com/gin-gonic/gin"
 )
 
 
-func Login() gin.HandlerFunc {
+func LoginGet() gin.HandlerFunc {
 	return func (c *gin.Context)  {
-		c.HTML(200, "login.html", gin.H{})
+		c.HTML(http.StatusOK, "login.html", gin.H{})
+	}
+}
+
+func LoginPost() gin.HandlerFunc {
+	return func (c *gin.Context)  {
+		c.HTML(http.StatusOK, "login.html", gin.H{})
 	}
 }
 
 func RegisterGet() gin.HandlerFunc {
 	return func (c *gin.Context)  {
-		c.HTML(200, "register.html", gin.H{})
+		c.HTML(http.StatusOK, "register.html", gin.H{})
 	}
 }
 
@@ -29,15 +36,17 @@ func RegisterPost() gin.HandlerFunc {
 		// パスワードをハッシュ化
 		hash, err := crypto.PasswordEncrypt(password)
 		if err != nil {
-			fmt.Println(err)
-			c.JSON(500, gin.H{"message": "Internal Server Error"})
+			slog.Error(err.Error())
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Encrypt Error"})
+			return
 		}
 
 		// ユーザー登録
 		err = crud.InsertUser(username, email, hash)
 		if err != nil {
-			fmt.Println(err)
-			c.JSON(500, gin.H{"message": "Internal Server Error"})
+			slog.Error(err.Error())
+			c.JSON(http.StatusBadRequest, gin.H{"message": "User Insert Error"})
+			return
 		}
 
 		c.JSON(200, gin.H{"message": "OK"})

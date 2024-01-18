@@ -1,41 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Register Page</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>Register Page</h1>
 
-    <h2><a href="">Discordで登録</a></h2>
+<body class="bg-light">
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Register Page</h1>
 
-    <p>または</p>
+        <h2 class="text-center mb-4"><a href="#" class="btn btn-primary btn-lg">Discordで登録</a></h2>
 
-    <form method="post">
-        <div>
-            <label for="username">ユーザ名</label>
-            <input type="text" name="username" id="username" placeholder="ニックネームを入力 (必須)">
-        </div>
+        <p class="text-center">または</p>
 
-        <div>
-            <label for="email">メールアドレス</label>
-            <input type="email" name="email" id="email" placeholder="ex@example.jp (任意)">
-        </div>
+        <form method="post" class="row g-3">
+            <div class="col-md-6">
+                <label for="username" class="form-label">ユーザ名</label>
+                <input type="text" name="username" id="username" class="form-control" placeholder="ニックネームを入力 (必須)" required>
+            </div>
 
-        <div>
-            <label for="password">パスワード</label>
-            <input type="password" name="password" id="password">
-        </div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">メールアドレス</label>
+                <input type="email" name="email" id="email" class="form-control" placeholder="ex@example.jp (任意)">
+            </div>
 
-        <div>
-            <label for="password_confirmation">パスワード確認</label>
-            <input type="password" name="password_confirmation" id="password_confirmation">
-        </div>
+            <div class="col-md-6">
+                <label for="password" class="form-label">パスワード</label>
+                <input type="password" name="password" id="password" class="form-control" required>
+            </div>
 
-        <div>
-            <button type="submit">登録</button>
-        </div>
-    </form>
+            <div class="col-md-6">
+                <label for="password_confirmation" class="form-label">パスワード確認</label>
+                <input type="password" name="password_confirmation" id="password_confirmation" class="form-control" required>
+            </div>
+
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary">登録</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS (optional, for certain components) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
+
 </html>

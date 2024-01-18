@@ -58,6 +58,10 @@ func RegisterPost() gin.HandlerFunc {
 		}
 
 		slog.Info("User created")
+
+		// クッキーにログイン情報をセット
+
+		// リダイレクト
 		c.Redirect(http.StatusTemporaryRedirect, "/mypage")
 	}
 }

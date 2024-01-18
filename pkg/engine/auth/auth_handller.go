@@ -1,6 +1,8 @@
 package auth
 
 import (
+	"errors"
+	"oblivion/pkg/error_hanndler"
 	"log/slog"
 	"net/http"
 	"oblivion/pkg/utils/crypto"
@@ -43,12 +45,19 @@ func RegisterPost() gin.HandlerFunc {
 
 		// ユーザー登録
 		err = crud.InsertUser(username, email, hash)
-		if err != nil {
+		if errors.As(err, &error_hanndler.AlreadyExsistUserError{}) {
+			// クッキーにエラーをセット
+
+			// リダイレクト
+			c.Redirect(http.StatusTemporaryRedirect, "/register")
+			return
+		} else if err != nil {
 			slog.Error(err.Error())
-			c.JSON(http.StatusBadRequest, gin.H{"message": "User Insert Error"})
+			c.JSON(http.StatusBadRequest, gin.H{"message": "Insert Error"})
 			return
 		}
 
-		c.JSON(200, gin.H{"message": "OK"})
+		slog.Info("User created")
+		c.Redirect(http.StatusTemporaryRedirect, "/mypage")
 	}
 }

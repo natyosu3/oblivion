@@ -2,12 +2,21 @@ package engine
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"oblivion/pkg/engine/auth"
 	"oblivion/pkg/engine/top"
+	"oblivion/pkg/engine/mypage"
 )
 
 func Engine(r *gin.Engine) *gin.Engine  {
 	r.LoadHTMLGlob("web/templates/*/*.html")
+
+	r.Static("/static", "web/static")
+
+	store := cookie.NewStore([]byte("secret"))
+	r.Use(sessions.Sessions("session", store))
+	
 
 	topGroup := r.Group("/")
 	{
@@ -21,6 +30,11 @@ func Engine(r *gin.Engine) *gin.Engine  {
 
 		authGroup.GET("/register", auth.RegisterGet())
 		authGroup.POST("/register", auth.RegisterPost())
+	}
+
+	mypageGroup := r.Group("/mypage")
+	{
+		mypageGroup.GET("/", mypage.MypageTop())
 	}
 
 	return r

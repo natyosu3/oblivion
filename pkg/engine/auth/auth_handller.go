@@ -8,6 +8,7 @@ import (
 	"oblivion/pkg/utils/crypto"
 	"oblivion/pkg/crud"
 	"github.com/gin-gonic/gin"
+	"github.com/gin-contrib/sessions"
 )
 
 
@@ -31,6 +32,8 @@ func RegisterGet() gin.HandlerFunc {
 
 func RegisterPost() gin.HandlerFunc {
 	return func (c *gin.Context)  {
+		session := sessions.Default(c)
+
 		username := c.PostForm("username")
 		email := c.PostForm("email")
 		password := c.PostForm("password")
@@ -47,6 +50,7 @@ func RegisterPost() gin.HandlerFunc {
 		err = crud.InsertUser(username, email, hash)
 		if errors.As(err, &error_hanndler.AlreadyExsistUserError{}) {
 			// クッキーにエラーをセット
+			session.AddFlash("既に登録されているユーザーです")
 
 			// リダイレクト
 			c.Redirect(http.StatusTemporaryRedirect, "/register")
@@ -60,8 +64,10 @@ func RegisterPost() gin.HandlerFunc {
 		slog.Info("User created")
 
 		// クッキーにログイン情報をセット
+		session.Set("username", username)
+		session.Save()
 
 		// リダイレクト
-		c.Redirect(http.StatusTemporaryRedirect, "/mypage")
+		c.Redirect(http.StatusMovedPermanently, "/mypage")
 	}
 }

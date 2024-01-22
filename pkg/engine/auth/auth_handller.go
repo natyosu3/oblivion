@@ -19,3 +19,7 @@ func RegisterGet() gin.HandlerFunc {
 func RegisterPost() gin.HandlerFunc {
 	return registerPost()
 }
+
+func LogoutGet() gin.HandlerFunc {
+	return logoutGet()
+}

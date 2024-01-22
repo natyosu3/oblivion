@@ -1,11 +1,13 @@
 package auth
 
 import (
+	"encoding/json"
 	"errors"
 	"log/slog"
 	"net/http"
 	"oblivion/pkg/crud"
 	"oblivion/pkg/error_hanndler"
+	"oblivion/pkg/user"
 	"oblivion/pkg/utils/crypto"
 
 	"github.com/gin-contrib/sessions"
@@ -50,8 +52,28 @@ func LoginPost() gin.HandlerFunc {
 			return
 		}
 
-		session.Set("userid", userid)
+		user := user.User{
+			UserId: userid,
+			UserName: username,
+			Password: pass_hash,
+			Comportement: user.Comportement{Id: "CP-" + userid },
+		}
+
+		json, err := json.Marshal(user)
+		if err != nil {
+			slog.Error(err.Error())
+			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
+			return
+		}
+
+		session.Set("user", json)
 		session.Save()
+
+		// session.Set("userid", userid)
+		// session.Set("username", username)
+		// session.Set("password", pass_hash)
+		// session.Set("comportement", "CP-" + userid)
+		// session.Save()
 
 		c.Redirect(http.StatusMovedPermanently, "/mypage")
 	}
@@ -97,8 +119,16 @@ func RegisterPost() gin.HandlerFunc {
 		// ユーザIDを取得
 		userid, err := crud.GetUserId(username)
 
+		user := user.User{
+			UserId: userid,
+			UserName: username,
+			EmailAddress: email,
+			Password: hash,
+			Comportement: user.Comportement{Id: "CP-" + userid },
+		}
+
 		// クッキーにログイン情報をセット
-		session.Set("userid", userid)
+		session.Set("user", user)
 		session.Save()
 
 		// リダイレクト

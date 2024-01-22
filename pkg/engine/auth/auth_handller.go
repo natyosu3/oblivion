@@ -2,7 +2,6 @@ package auth
 
 import (
 	"errors"
-	"fmt"
 	"log/slog"
 	"net/http"
 	"oblivion/pkg/crud"
@@ -27,28 +26,34 @@ func LoginPost() gin.HandlerFunc {
 		username := c.PostForm("username")
 		password := c.PostForm("password")
 
-		// パスワードをハッシュ化
-		pass_hash, err := crypto.PasswordEncrypt(password)
+		// ユーザ名からパスワードハッシュを取得
+		pass_hash, err := crud.GetPasswordHash(username)
 		if err != nil {
 			slog.Error(err.Error())
-			c.JSON(http.StatusBadRequest, gin.H{"message": "Encrypt Error"})
-			c.Abort()
+			c.HTML(http.StatusAccepted, "login.html", gin.H{"error": "ユーザ名が不正です."})
+			return
+		}
+
+		// パスワードを比較
+		err = crypto.CompareHashAndPassword(pass_hash, password)
+		if err != nil {
+			slog.Error(err.Error())
+			c.HTML(http.StatusAccepted, "login.html", gin.H{"error": "パスワードが不正です."})
+			return
 		}
 
 		// ユーザIDを取得
-		userid, err := crud.GetUserId(username, pass_hash)
+		userid, err := crud.GetUserId(username)
 		if err != nil {
 			slog.Error(err.Error())
-			c.HTML(http.StatusAccepted, "login.html", gin.H{"error": "ユーザ名・若しくはパスワードが不正です."})
-			c.Abort()
+			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
+			return
 		}
 
 		session.Set("userid", userid)
 		session.Save()
 
-		fmt.Println(userid)
-
-		c.Redirect(http.StatusTemporaryRedirect, "/mypage")
+		c.Redirect(http.StatusMovedPermanently, "/mypage")
 	}
 }
 
@@ -82,12 +87,15 @@ func RegisterPost() gin.HandlerFunc {
 			return
 		} else if err != nil {
 			slog.Error(err.Error())
-			c.JSON(http.StatusBadRequest, gin.H{"message": "Insert Error"})
+			c.JSON(http.StatusBadRequest, gin.H{
+				"message": "Insert Error",
+				"detail": err.Error(),
+			})
 			return
 		}
 
 		// ユーザIDを取得
-		userid, err := crud.GetUserId(username, hash)
+		userid, err := crud.GetUserId(username)
 
 		// クッキーにログイン情報をセット
 		session.Set("userid", userid)

@@ -11,13 +11,13 @@ import (
 func MypageTop() gin.HandlerFunc {
 	return func (c *gin.Context)  {
 		session := sessions.Default(c)
-		username := session.Get("username")
+		userid := session.Get("userid")
 
-		if username == nil {
+		if userid == nil {
 			c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 			c.Abort()
 		}
 
-		c.HTML(http.StatusOK, "mypage.html", gin.H{"username": username})
+		c.HTML(http.StatusOK, "mypage.html", gin.H{"userid": userid})
 	}
 }

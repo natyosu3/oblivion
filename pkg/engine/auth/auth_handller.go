@@ -17,6 +17,13 @@ import (
 
 func LoginGet() gin.HandlerFunc {
 	return func (c *gin.Context) {
+		session := sessions.Default(c)
+
+		if user := session.Get("user"); user != nil {
+			c.Redirect(http.StatusMovedPermanently, "/mypage")
+			return
+		}
+
 		c.HTML(http.StatusOK, "login.html", gin.H{})
 	}
 }
@@ -59,21 +66,15 @@ func LoginPost() gin.HandlerFunc {
 			Comportement: user.Comportement{Id: "CP-" + userid },
 		}
 
-		json, err := json.Marshal(user)
+		user_json, err := json.Marshal(user)
 		if err != nil {
 			slog.Error(err.Error())
 			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
 			return
 		}
 
-		session.Set("user", json)
+		session.Set("user", user_json)
 		session.Save()
-
-		// session.Set("userid", userid)
-		// session.Set("username", username)
-		// session.Set("password", pass_hash)
-		// session.Set("comportement", "CP-" + userid)
-		// session.Save()
 
 		c.Redirect(http.StatusMovedPermanently, "/mypage")
 	}

@@ -19,3 +19,11 @@ type InsertError struct {
 func (e InsertError) Error() string {
 	return e.Message
 }
+
+type SelectError struct {
+	Message string
+}
+
+func (e SelectError) Error() string {
+	return e.Message
+}

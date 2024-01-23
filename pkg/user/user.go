@@ -17,10 +17,10 @@ type Comportement struct {
 }
 
 type Element struct {
-	Id 	 int
+	Id 	 string
 	Name string
 	Content string
-	Priod_info Priod_info
+	UserId string
 }
 
 type Priod_info struct {

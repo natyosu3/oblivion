@@ -41,6 +41,7 @@ func Engine(r *gin.Engine) *gin.Engine  {
 	{
 		componentGroup.GET("/add", component.AddComponentGet())
 		componentGroup.POST("/add", component.AddComponentPost())
+		componentGroup.GET("/list", component.ListComponentGet())
 	}
 
 	mypageGroup := r.Group("/mypage")

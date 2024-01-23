@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-contrib/sessions"
 	"oblivion/pkg/crud"
-	"oblivion/pkg/error_hanndler"
+	"oblivion/pkg/error_handler"
 	"oblivion/pkg/user"
 	"oblivion/pkg/utils/crypto"
 	"errors"
@@ -36,7 +36,7 @@ func registerPost() gin.HandlerFunc {
 
 		// ユーザー登録
 		err = crud.InsertUser(username, email, hash)
-		if errors.As(err, &error_hanndler.AlreadyExsistUserError{}) {
+		if errors.As(err, &error_handler.AlreadyExsistUserError{}) {
 			// リダイレクト
 			c.JSON(http.StatusBadRequest, gin.H{"message": "Already registered"})
 			return

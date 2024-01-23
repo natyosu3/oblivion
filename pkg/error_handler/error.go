@@ -11,3 +11,11 @@ type AlreadyExsistUserError struct {
 func (e AlreadyExsistUserError) Error() string {
     return e.Message
 }
+
+type InsertError struct {
+	Message string
+}
+
+func (e InsertError) Error() string {
+	return e.Message
+}

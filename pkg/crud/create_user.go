@@ -2,7 +2,7 @@ package crud
 
 import (
 	"database/sql"
-	"oblivion/pkg/error_hanndler"
+	"oblivion/pkg/error_handler"
 	"oblivion/pkg/utils/general"
 
 	_ "github.com/lib/pq"
@@ -37,7 +37,7 @@ func checkExsistUser(name string, email string) (bool, error) {
 		}
 	}
 
-	return true, error_hanndler.AlreadyExsistUserError{Message: "User already exsist"}
+	return true, error_handler.AlreadyExsistUserError{Message: "User already exsist"}
 }
 
 

@@ -20,9 +20,15 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
+              <a class="nav-link active" href="/mypage">Mypage</a>
               <a class="nav-link active" href="#">About</a>
               <a class="nav-link active" href="#">Contact</a>
+              {{ if .IsAuthenticated }}
+              <a class="nav-link active" href="/auth/logout">Logout</a>
+              {{ end }}
+              {{ if not .IsAuthenticated }}
               <a class="nav-link active" href="/auth/login">Login</a>
+              {{ end }}
             </div>
           </div>
         </div>

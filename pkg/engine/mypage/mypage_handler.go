@@ -26,6 +26,9 @@ func MypageTop() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 
-		c.HTML(http.StatusOK, "mypage.html", gin.H{"user": user})
+		c.HTML(http.StatusOK, "mypage.html", gin.H{
+			"user": user,
+			"IsAuthenticated": true,
+		})
 	}
 }

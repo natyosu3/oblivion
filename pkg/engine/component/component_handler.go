@@ -12,7 +12,9 @@ import (
 
 func AddComponentGet() gin.HandlerFunc {
 	return func (c *gin.Context)  {
-		c.HTML(200, "add.html", gin.H{})
+		c.HTML(200, "add.html", gin.H{
+			"IsAuthenticated": true,
+		})
 	}
 }
 
@@ -38,7 +40,10 @@ func AddComponentPost() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 
-		c.HTML(200, "add.html", gin.H{"message": "success"})
+		c.HTML(200, "add.html", gin.H{
+			"message": "success",
+			"IsAuthenticated": true,
+		})
 	}
 }
 
@@ -86,6 +91,9 @@ func ListComponentGet() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		}
 
-		c.HTML(200, "list.html", gin.H{"elements": elements})
+		c.HTML(200, "list.html", gin.H{
+			"elements": elements,
+			"IsAuthenticated": true,
+		})
 	}
 }

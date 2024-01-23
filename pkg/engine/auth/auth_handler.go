@@ -13,13 +13,13 @@ func LoginPost() gin.HandlerFunc {
 }
 
 func RegisterGet() gin.HandlerFunc {
-	return registerGet()
+	return registerGet
 }
 
 func RegisterPost() gin.HandlerFunc {
-	return registerPost()
+	return registerPost
 }
 
 func LogoutGet() gin.HandlerFunc {
-	return logoutGet()
+	return logoutGet
 }

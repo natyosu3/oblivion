@@ -22,7 +22,7 @@ func listComponentGet(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	elements, err := crud.ListElement(user.UserId)
+	elements, err := crud.GetListElement(user.UserId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}

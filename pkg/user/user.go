@@ -21,6 +21,7 @@ type Element struct {
 	Name string
 	Content string
 	UserId string
+	Remind string
 }
 
 type Priod_info struct {

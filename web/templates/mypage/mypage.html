@@ -15,7 +15,11 @@
         </div>
 
         <h2 class="mt-4">今日のリマインドリスト</h2>
-
+        <ul>
+            {{range .elements}}
+                <li>{{.Name}}</li>
+            {{end}}
+        </ul>
     </div>
 
     

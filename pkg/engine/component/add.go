@@ -2,11 +2,13 @@ package component
 
 import (
 	"encoding/json"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"oblivion/pkg/crud"
 	"oblivion/pkg/user"
+	"time"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 func addComponentGet(c *gin.Context) {
@@ -31,9 +33,13 @@ func addComponentPost(c *gin.Context) {
 	elementName := c.PostForm("name")
 	content := c.PostForm("content")
 
-	err := crud.InsertElement(user.UserId, elementName, content)
+	// 新規追加の場合なので, 次のリマインド日時を24時間後に設定する
+	nextRemindTime := time.Now().Add(24 * time.Hour).Format("2006-01-02 15:04:05")
+
+	err := crud.InsertElement(user.UserId, elementName, content, nextRemindTime)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
 	}
 
 	c.HTML(200, "add.html", gin.H{

@@ -18,7 +18,8 @@
                     <div class="col-md-6">
                         <span class="fw-bold">ID:</span> {{ .Id }}<br>
                         <span class="fw-bold">Name:</span> {{ .Name }}<br>
-                        <span class="fw-bold">Content:</span> {{ .Content }}
+                        <span class="fw-bold">Content:</span>
+                        <div class="text-truncate" style="max-width: 300px;">{{ .Content }}</div>
                     </div>
                     <div class="my-3 text-right">
                         <form action="/component/delete" method="post" class="d-inline">

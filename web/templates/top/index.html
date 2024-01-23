@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    {{ template "head" . }}
+    <title>Oblivion</title>
 </head>
 <body>
+    {{ template "navbar" .}}
     <h1>メインページ</h1>
     <p><a href="/auth/login">ログインはこちら</a></p>
 </body>

@@ -1,4 +1,4 @@
-package error_hanndler
+package error_handler
 
 import (
 

@@ -1,12 +1,14 @@
 package engine
 
 import (
-	"github.com/gin-gonic/gin"
+	"oblivion/pkg/engine/auth"
+	"oblivion/pkg/engine/component"
+	"oblivion/pkg/engine/mypage"
+	"oblivion/pkg/engine/top"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
-	"oblivion/pkg/engine/auth"
-	"oblivion/pkg/engine/top"
-	"oblivion/pkg/engine/mypage"
+	"github.com/gin-gonic/gin"
 )
 
 func Engine(r *gin.Engine) *gin.Engine  {
@@ -33,6 +35,12 @@ func Engine(r *gin.Engine) *gin.Engine  {
 
 		authGroup.GET("/register", auth.RegisterGet())
 		authGroup.POST("/register", auth.RegisterPost())
+	}
+
+	componentGroup := r.Group("/component")
+	{
+		componentGroup.GET("/add", component.AddComponentGet())
+		componentGroup.POST("/add", component.AddComponentPost())
 	}
 
 	mypageGroup := r.Group("/mypage")

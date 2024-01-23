@@ -13,6 +13,6 @@ func logoutGet() gin.HandlerFunc {
 		session.Clear()
 		session.Save()
 
-		c.Redirect(http.StatusMovedPermanently, "/login")
+		c.Redirect(http.StatusMovedPermanently, "/auth/login")
 	}
 }

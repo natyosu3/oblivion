@@ -27,3 +27,11 @@ type SelectError struct {
 func (e SelectError) Error() string {
 	return e.Message
 }
+
+type DeleteError struct {
+	Message string
+}
+
+func (e DeleteError) Error() string {
+	return e.Message
+}

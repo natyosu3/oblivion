@@ -41,6 +41,7 @@ func Engine(r *gin.Engine) *gin.Engine  {
 	{
 		componentGroup.GET("/add", component.AddComponentGet())
 		componentGroup.POST("/add", component.AddComponentPost())
+		componentGroup.POST("/delete", component.DeleteComponentPost())
 		componentGroup.GET("/list", component.ListComponentGet())
 	}
 

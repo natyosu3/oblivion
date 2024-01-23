@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,23 +8,39 @@
     <!-- Add Bootstrap CSS link -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 </head>
+
 <body class="bg-light">
     <div class="container mt-4">
         <h1 class="mb-4">登録済みリスト</h1>
         <ul class="list-group">
             {{ range .elements }}
             <li class="list-group-item">
-                <span class="font-weight-bold">ID:</span> {{ .Id }}<br>
-                <span class="font-weight-bold">Name:</span> {{ .Name }}<br>
-                <span class="font-weight-bold">Content:</span> {{ .Content }}
+                <div class="row">
+                    <div class="col-md-6">
+                        <span class="font-weight-bold">ID:</span> {{ .Id }}<br>
+                        <span class="font-weight-bold">Name:</span> {{ .Name }}<br>
+                        <span class="font-weight-bold">Content:</span> {{ .Content }}
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <form action="/component/delete" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="{{ .Id }}">
+                            <button type="submit" class="btn btn-danger btn-sm">削除</button>
+                        </form>
+                        <span><a href="#" class="btn btn-primary btn-sm ml-2">編集</a></span>
+                    </div>
+                </div>
             </li>
             {{ end }}
         </ul>
     </div>
+
+    <a href="/component/add">リストの追加</a>
 
     <!-- Add Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
+
 </html>
+

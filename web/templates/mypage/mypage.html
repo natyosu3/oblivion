@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     {{ template "head" . }}
     <title>ようこそ{{.user.UserName}}さん</title>
 </head>
+
 <body>
     {{ template "navbar" .}}
-    <div class="container mt-4">
-        <h1>{{.user.UserName}}さんのマイページ</h1>
+    <div class="container">
+        <div class="row g-4">
+            <h1>{{.user.UserName}}さんのマイページ</h1>
 
-        <div class="mt-4">
-            <h2><a href="/component/add" class="btn btn-primary">リスト登録</a></h2>
-            <h2><a href="/component/list" class="btn btn-primary">リスト一覧</a></h2>
-        </div>
+            <div class="mt-4">
+                <h2><a href="/component/add" class="btn btn-primary">リスト登録</a></h2>
+                <h2><a href="/component/list" class="btn btn-primary">リスト一覧</a></h2>
+            </div>
 
-        <h2 class="mt-4">今日のリマインドリスト</h2>
-        <ul>
+            <h2 class="mt-4">今日のリマインドリスト</h2>
+
             {{range .elements}}
-                <li>{{.Name}}</li>
+            <div class="col-lg-4 col-sm-6">
+                <div class="element card-effect bg-primary">
+                    <h5 class="card-title">{{ .Name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
+                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
+                        card's content.</p>
+                    <a href="#" class="card-link">学習する</a>
+                    <a href="#" class="card-link">Another link</a>
+                </div>
+            </div>
             {{end}}
-        </ul>
+        </div>
     </div>
-
-    
 </body>
+
 </html>

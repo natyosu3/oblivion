@@ -20,6 +20,19 @@
                 <li>{{.Name}}</li>
             {{end}}
         </ul>
+        {{ range .elements }}
+        <div>
+            <h3>{{ .Name }}</h3>
+            <span hidden>{{ .Id }}</span>
+
+            <form action="/component/check" method="post">
+                <input type="hidden" name="id" value="{{ .Id }}">
+                <input type="submit" value="チェック">
+            </form>
+        <div>
+        {{ end }}
+
+        </div>
     </div>
 
     

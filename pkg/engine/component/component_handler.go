@@ -19,3 +19,7 @@ func DeleteComponentPost() gin.HandlerFunc {
 func ListComponentGet() gin.HandlerFunc {
 	return listComponentGet
 }
+
+func CheackComponentPost() gin.HandlerFunc {
+	return cheackComponentPost
+}

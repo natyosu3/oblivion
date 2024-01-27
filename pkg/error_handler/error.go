@@ -35,3 +35,7 @@ type DeleteError struct {
 func (e DeleteError) Error() string {
 	return e.Message
 }
+
+type UpdateError struct {
+	Message string
+}

@@ -4,6 +4,8 @@ import (
 	"net/http"
 	"oblivion/pkg/crud"
 
+	"oblivion/pkg/utils/general"
+
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
@@ -22,7 +24,22 @@ func cheackComponentPost(c *gin.Context) {
 		return
 	}
 
-	element := crud.
+	element, err := crud.GetElement(elementId)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "element not found",
+			"err":   err,
+		})
+		return
+	}
+
+	nextday := general.MakeNextRemindDate(element.Frequency)
+
+	err = crud.UpdateElement(elementId, element, nextday)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "element not found"})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "elementId": elementId, "message": "elementId is not empty"})
 }

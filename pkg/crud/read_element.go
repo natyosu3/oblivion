@@ -6,6 +6,25 @@ import (
 	"oblivion/pkg/user"
 )
 
+func GetElement(id string) (user.Element, error) {
+	db := Connect()
+	defer db.Close()
+
+	var (
+		sqlStatement string
+		element      user.Element
+		err          error
+	)
+
+	sqlStatement = `SELECT id, name, content, remind, frequency FROM "Element" WHERE id = $1`
+	err = db.QueryRow(sqlStatement, id).Scan(&element.Id, &element.Name, &element.Content, &element.Remind, &element.Frequency)
+	if err != nil {
+		return user.Element{}, error_handler.SelectError{Message: err.Error()}
+	}
+
+	return element, nil
+}
+
 func GetListElement(userid string) ([]user.Element, error) {
 	db := Connect()
 	defer db.Close()

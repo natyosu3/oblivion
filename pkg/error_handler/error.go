@@ -39,3 +39,15 @@ func (e DeleteError) Error() string {
 type UpdateError struct {
 	Message string
 }
+
+func (e UpdateError) Error() string {
+	return e.Message
+}
+
+type NoRowsError struct {
+	Message string
+}
+
+func (e NoRowsError) Error() string {
+	return e.Message
+}

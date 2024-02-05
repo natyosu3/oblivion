@@ -12,5 +12,5 @@ func logoutGet(c *gin.Context) {
 	session.Clear()
 	session.Save()
 
-	c.Redirect(http.StatusMovedPermanently, "/auth/login")
+	c.Redirect(http.StatusSeeOther, "/auth/login")
 }

@@ -1,2 +1,2 @@
-spoilerAlert('.blur',{max: 10 , partial: 8});
+spoilerAlert('.blur',{max: 10 , partial: 7});
 

@@ -4,29 +4,35 @@
 <head>
     {{ template "head" . }}
     <title>ようこそ{{.user.UserName}}さん</title>
+    <link rel="stylesheet" href="../../static/mypage/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&family=Capriola&family=Kiwi+Maru&family=Nunito:wght@200;400&display=swap" rel="stylesheet">
 </head>
 
 <body>
     {{ template "navbar" .}}
     <div class="container">
-        <div class="row g-4">
-            <h1>{{.user.UserName}}さんのマイページ</h1>
+        <div class="row">
+            <h2>{{.user.UserName}}さんのマイページ</h2>
 
-            <div class="mt-4">
+            <div class="col-6">
                 <h2><a href="/component/add" class="btn btn-primary">リスト登録</a></h2>
+            </div>
+            <div class="col-6">
                 <h2><a href="/component/list" class="btn btn-primary">リスト一覧</a></h2>
             </div>
+            
 
-            <h2 class="mt-4">今日のリマインドリスト</h2>
+            <h2>今日のリマインドリスト</h2>
 
             {{range .elements}}
             <div class="col-lg-4 col-sm-6">
-                <div class="element card bg-primary text-white">
+                <div class="element card text-white">
                     <div class="card-body">
                         <h5 class="card-title">{{ .Name }}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">モザイクをクリックして確認</h6>
-                        <p class="blur">Some quick example text to build on the card title and make up the bulk of the
-                            card's content.</p>
+                        <p class="blur">{{ .Content }}</p>
 
                         <form action="/component/check" method="post">
                             <input type="hidden" name="id" value="{{ .Id }}">

@@ -18,11 +18,18 @@ func cheackComponentPost(c *gin.Context) {
 		return
 	}
 	elementId := c.PostForm("id")
+	memorization := c.PostForm("memorization")
 
 	if elementId == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "elementId is empty"})
 		return
 	}
+
+	if memorization == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "memorization is empty"})
+		return
+	}
+
 
 	element, err := crud.GetElement(elementId)
 	if err != nil {
@@ -33,13 +40,16 @@ func cheackComponentPost(c *gin.Context) {
 		return
 	}
 
-	nextday := general.MakeNextRemindDate(element.Frequency)
-
-	err = crud.UpdateElement(elementId, element, nextday)
+	// memorizationが正なら次回のリマインド日を更新
+	if memorization == "yes" {
+		err = crud.UpdateElement(elementId, element, general.MakeNextRemindDate(element.Frequency))
+	} else {
+		err = crud.UpdateElement(elementId, element, element.Remind)
+	}
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "element not found"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"status": "ok", "elementId": elementId, "message": "elementId is not empty"})
+	c.Redirect(http.StatusSeeOther, "/mypage")
 }

@@ -21,31 +21,31 @@
 
             {{range .elements}}
             <div class="col-lg-4 col-sm-6">
-                <div class="element card-effect bg-primary">
-                    <h5 class="card-title">{{ .Name }}</h5>
-                    <h6 class="card-subtitle mb-2 text-body-secondary">Card subtitle</h6>
-                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the
-                        card's content.</p>
-                    <a href="#" class="card-link">学習する</a>
-                    <a href="#" class="card-link">Another link</a>
+                <div class="element card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ .Name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">モザイクをクリックして確認</h6>
+                        <p class="blur">Some quick example text to build on the card title and make up the bulk of the
+                            card's content.</p>
+
+                        <form action="/component/check" method="post">
+                            <input type="hidden" name="id" value="{{ .Id }}">
+                            <input type="hidden" name="memorization" value="yes">
+                            <input type="submit" name="btn btn-light memorization" value="覚えていた">
+                        </form>
+                        <form action="/component/check" method="post">
+                            <input type="hidden" name="id" value="{{ .Id }}">
+                            <input type="hidden" name="memorization" value="no">
+                            <input type="submit" name="btn btn-light memorization" value="忘れていた">
+                        </form>
+                    </div>
                 </div>
             </div>
             {{end}}
         </div>
-        {{ range .elements }}
-        <div>
-            <h3>{{ .Name }}</h3>
-            <span hidden>{{ .Id }}</span>
-
-            <form action="/component/check" method="post">
-                <input type="hidden" name="id" value="{{ .Id }}">
-                <input type="submit" value="チェック">
-            </form>
-        <div>
-        {{ end }}
-
-        </div>
     </div>
+    <script src="../../static/mypage/spoiler.min.js"></script>
+    <script src="../../static/mypage/mypage.js"></script>
 </body>
 
 </html>

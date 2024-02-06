@@ -35,6 +35,7 @@ func MypageTop() gin.HandlerFunc {
 		}
 
 		doElements := []user.Element{}
+		expiredElement := []user.Element{}
 		for _, element := range elements {
 			// リマインド日時が24時間以内の要素を取得する
 			remindTime, err := time.ParseInLocation("2006-01-02 15:04:05", element.Remind, time.Local)
@@ -43,19 +44,21 @@ func MypageTop() gin.HandlerFunc {
 				return
 			}
 
-			// 現在の時間から24時間後の時間を計算
-			now := time.Now()
-			nowPlus24Hours := now.Add(24 * time.Hour)
+			// 現在の日付を取得
+			today := time.Now().Format("2006-01-02")
 
-			// remindTimeが現在の時間から24時間以内であれば追加
-			if remindTime.After(now) && remindTime.Before(nowPlus24Hours) {
+			// remindTimeが今日の日付と同じであれば追加, 期限切れであればexpiredElementに追加
+			if remindTime.Format("2006-01-02") == today {
 				doElements = append(doElements, element)
+			} else if remindTime.Format("2006-01-02") < today {
+				expiredElement = append(expiredElement, element)
 			}
 		}
 
 		c.HTML(http.StatusOK, "mypage.html", gin.H{
 			"user":            userinfo,
 			"elements":        doElements,
+			"expiredElements": expiredElement,
 			"IsAuthenticated": true,
 		})
 	}

@@ -7,7 +7,9 @@
     <link rel="stylesheet" href="../../static/mypage/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&family=Capriola&family=Kiwi+Maru&family=Nunito:wght@200;400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Arimo:wght@400;500;600;700&family=Capriola&family=Kiwi+Maru&family=Nunito:wght@200;400&display=swap"
+        rel="stylesheet">
 </head>
 
 <body>
@@ -22,13 +24,49 @@
             <div class="col-6">
                 <h2><a href="/component/list" class="btn btn-primary">リスト一覧</a></h2>
             </div>
-            
+
 
             <h2>今日のリマインドリスト</h2>
 
+            {{if .elements}}
             {{range .elements}}
             <div class="col-lg-4 col-sm-6">
                 <div class="element card text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ .Name }}</h5>
+                        <h6 class="card-subtitle mb-2 text-body-secondary">モザイクをクリックして確認</h6>
+                        <p class="blur">{{ .Content }}</p>
+
+                        <form action="/component/check" method="post">
+                            <input type="hidden" name="id" value="{{ .Id }}">
+                            <input type="hidden" name="memorization" value="yes">
+                            <input type="submit" name="btn btn-light memorization" value="覚えていた">
+                        </form>
+                        <form action="/component/check" method="post">
+                            <input type="hidden" name="id" value="{{ .Id }}">
+                            <input type="hidden" name="memorization" value="no">
+                            <input type="submit" name="btn btn-light memorization" value="忘れていた">
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {{end}}
+            {{else}}
+            <div class="none-msg">
+                <div>
+                    <p>今日のリマインドリストはありません</p>
+                    <p>お疲れ様でした。</p>
+                </div>
+            </div>
+            {{end}}
+
+
+
+            <h2>期限切れリマインドリスト</h2>
+
+            {{range .expiredElements}}
+            <div class="col-lg-4 col-sm-6">
+                <div class="expiredElement card text-white">
                     <div class="card-body">
                         <h5 class="card-title">{{ .Name }}</h5>
                         <h6 class="card-subtitle mb-2 text-body-secondary">モザイクをクリックして確認</h6>

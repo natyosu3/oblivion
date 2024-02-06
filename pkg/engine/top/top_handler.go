@@ -7,6 +7,8 @@ import (
 
 func Index() gin.HandlerFunc {
 	return func (c *gin.Context)  {
-		c.HTML(200, "index.html", gin.H{})
+		c.HTML(200, "index.html", gin.H{
+			"IsAuthenticated": true,
+		})
 	}
 }

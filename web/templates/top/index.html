@@ -1,12 +1,52 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
+    <link rel="stylesheet" href="../../static/top/style.css">
     {{ template "head" . }}
     <title>Oblivion</title>
 </head>
+
 <body>
     {{ template "navbar" .}}
-    <h1>メインページ</h1>
-    <p><a href="/auth/login">ログインはこちら</a></p>
+    <header>
+        <h1>Oblivion - 暗記支援アプリ</h1>
+        <p>学習を効果的にサポートする暗記支援アプリ</p>
+    </header>
+
+    <section>
+        <h2>特長</h2>
+        <p>・直感的なインターフェースで効率的な学習が可能</p>
+        <p>・カスタマイズ可能な暗記カードで自分に合った学習ができる</p>
+        <p>・進捗トラッキング機能で学習の成果を確認</p>
+        <a href="#signup" class="cta-button">今すぐ始める</a>
+    </section>
+
+    <!-- 新たに追加したセクション -->
+    <div class="forgetting-curve-section">
+        <h2>エビングハウスの忘却曲線を考慮</h2>
+        <p class="forgetting-curve-info">
+            Oblivionはエビングハウスの忘却曲線に基づいて学習をサポートします。定期的な復習が、
+            情報をより確実に定着させるのに役立ちます。アプリが最適なタイミングで復習を促します。
+        </p>
+    </div>
+
+    <section class="intro">
+        <div>
+            <img class="sample-img img-fluid" src="../../static/top/sample.png" alt="">
+            <img class="sample-ing img-fluid" src="../../static/top/ebbinghaus.png" alt="">
+        </div>
+    </section>
+
+    <section id="signup">
+        <h2>無料で始める</h2>
+        <p>今すぐアカウントを作成してOblivionの利用を始めましょう。</p>
+        <a href="/auth/register" class="cta-button">アカウント作成</a>
+    </section>
+
+    <footer>
+        <p>&copy; 2024 Oblivion. All rights reserved.</p>
+    </footer>
 </body>
+
 </html>

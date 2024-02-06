@@ -35,7 +35,7 @@ func GetListElement(userid string) ([]user.Element, error) {
 		err          error
 	)
 
-	sqlStatement = `SELECT id, name, content, remind FROM "Element" WHERE userid = $1`
+	sqlStatement = `SELECT id, name, content, remind, frequency FROM "Element" WHERE userid = $1`
 	rows, err = db.Query(sqlStatement, userid)
 	if err != nil {
 		return nil, error_handler.SelectError{Message: "Select Error"}
@@ -44,7 +44,7 @@ func GetListElement(userid string) ([]user.Element, error) {
 	var elements []user.Element
 	for rows.Next() {
 		var element user.Element
-		if err := rows.Scan(&element.Id, &element.Name, &element.Content, &element.Remind); err != nil {
+		if err := rows.Scan(&element.Id, &element.Name, &element.Content, &element.Remind, &element.Frequency); err != nil {
 			return nil, error_handler.SelectError{Message: "Select Error"}
 		}
 		elements = append(elements, element)

@@ -5,7 +5,7 @@ import (
 	"oblivion/pkg/user"
 )
 
-func UpdateElement(id string, element user.Element, nextday string) error {
+func UpdateElement(element user.Element) error {
 	db := Connect()
 	defer db.Close()
 
@@ -14,12 +14,10 @@ func UpdateElement(id string, element user.Element, nextday string) error {
 		err          error
 	)
 
-	element.Frequency = element.Frequency + 1
-
-	sqlStatement = `UPDATE "Element" SET remind = $1, frequency = $2 WHERE id = $3`
-	_, err = db.Exec(sqlStatement, nextday, element.Frequency, id)
+	sqlStatement = `UPDATE "Element" SET name = $1, content = $2, remind = $3, frequency = $4 WHERE id = $5`
+	_, err = db.Exec(sqlStatement, element.Name, element.Content, element.Remind, element.Frequency, element.Id)
 	if err != nil {
-		return error_handler.UpdateError{Message: "Update Error"}
+		return error_handler.UpdateError{Message: err.Error()}
 	}
 
 	return nil

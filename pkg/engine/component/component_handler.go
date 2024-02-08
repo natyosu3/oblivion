@@ -23,3 +23,11 @@ func ListComponentGet() gin.HandlerFunc {
 func CheackComponentPost() gin.HandlerFunc {
 	return cheackComponentPost
 }
+
+func EditComponentGet() gin.HandlerFunc {
+	return editComponentGet
+}
+
+func EditComponentPost() gin.HandlerFunc {
+	return editComponentPost
+}

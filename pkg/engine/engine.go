@@ -45,6 +45,8 @@ func Engine(r *gin.Engine) *gin.Engine  {
 		componentGroup.POST("/delete", component.DeleteComponentPost())
 		componentGroup.GET("/list", component.ListComponentGet())
 		componentGroup.POST("/check", component.CheackComponentPost())
+		componentGroup.GET("/edit/:id", component.EditComponentGet())
+		componentGroup.POST("/edit/:id", component.EditComponentPost())
 	}
 
 	mypageGroup := r.Group("/mypage")

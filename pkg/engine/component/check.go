@@ -5,6 +5,7 @@ import (
 	"oblivion/pkg/crud"
 
 	"oblivion/pkg/utils/general"
+	"oblivion/pkg/user"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
@@ -42,9 +43,23 @@ func cheackComponentPost(c *gin.Context) {
 
 	// memorizationが正なら次回のリマインド日を更新
 	if memorization == "yes" {
-		err = crud.UpdateElement(elementId, element, general.MakeNextRemindDate(element.Frequency))
+		elem := user.Element{
+			Id:        elementId,
+			Name:      element.Name,
+			Content:   element.Content,
+			Remind:	   general.MakeNextRemindDate(element.Frequency),
+			Frequency: element.Frequency + 1,
+		}
+		err = crud.UpdateElement(elem)
 	} else {
-		err = crud.UpdateElement(elementId, element, element.Remind)
+		elem := user.Element{
+			Id:        elementId,
+			Name:      element.Name,
+			Content:   element.Content,
+			Remind:	   element.Remind,
+			Frequency: element.Frequency,
+		}
+		err = crud.UpdateElement(elem)
 	}
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "element not found"})

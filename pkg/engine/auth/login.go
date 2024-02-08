@@ -55,7 +55,6 @@ func loginPost (c *gin.Context) {
 	user := user.User{
 		UserId: userid,
 		UserName: username,
-		Password: pass_hash,
 		Comportement: user.Comportement{Id: "CP-" + userid },
 	}
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    {{ template "head" . }}
+    <title>登録済みリスト</title>
+    <link rel="stylesheet" href="../../static/component/style.css">
+</head>
+
+<body class="bg-light">
+    {{ template "navbar" .}}
+    <div class="container">
+        <div>
+            <form method="post">
+                <input type="hidden" name="id" value="{{ .element.Id }}">
+                <p><strong>ID:</strong> {{ .element.Id }}</p>
+                <p><strong>Frequency:</strong> {{ .element.Frequency }}</p>
+                <p><strong>Name</strong></p>
+                <input type="text" name="name" value="{{ .element.Name }}">
+                <p><strong>Content</strong></p>
+                <textarea name="content">{{ .element.Content }}</textarea>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

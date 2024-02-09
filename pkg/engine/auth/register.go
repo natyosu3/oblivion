@@ -1,15 +1,17 @@
 package auth
 
 import (
-	"net/http"
-	"github.com/gin-gonic/gin"
+	"errors"
 	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
+
+	"encoding/json"
+	"log/slog"
+	"net/http"
 	"oblivion/pkg/crud"
 	"oblivion/pkg/error_handler"
 	"oblivion/pkg/user"
 	"oblivion/pkg/utils/crypto"
-	"errors"
-	"log/slog"
 )
 
 func registerGet(c *gin.Context) {
@@ -41,27 +43,38 @@ func registerPost(c *gin.Context) {
 		slog.Error(err.Error())
 		c.JSON(http.StatusBadRequest, gin.H{
 			"message": "Insert Error",
-			"detail": err.Error(),
+			"detail":  err.Error(),
 		})
 		return
 	}
 
 	// ユーザIDを取得
 	userid, err := crud.GetUserId(username)
+	if err != nil {
+		slog.Error(err.Error())
+		c.JSON(http.StatusBadRequest, gin.H{"message": "Get User ID Error"})
+		return
+	}
 
 	user := user.User{
-		UserId: userid,
-		UserName: username,
+		UserId:       userid,
+		UserName:     username,
 		EmailAddress: email,
-		Password: hash,
-		Comportement: user.Comportement{Id: "CP-" + userid },
+		Comportement: user.Comportement{Id: "CP-" + userid},
+	}
+
+	user_json, err := json.Marshal(user)
+	if err != nil {
+		slog.Error(err.Error())
+		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
+		return
 	}
 
 	// クッキーにログイン情報をセット
-	session.Set("user", user)
+	session.Set("user", user_json)
 	session.Save()
 
 	// リダイレクト
-	c.Redirect(http.StatusMovedPermanently, "/mypage")
+	c.Redirect(http.StatusSeeOther, "/mypage")
 
 }

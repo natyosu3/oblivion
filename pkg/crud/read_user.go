@@ -7,7 +7,6 @@ func GetUserId(username string) (string, error) {
 	db := Connect()
 	defer db.Close()
 
-	// 入力されたIDとパスワードが一致した場合, ユーザIDを返す
 	sqlStatement := `SELECT userid FROM "User" WHERE username = $1`
 	row := db.QueryRow(sqlStatement, username)
 

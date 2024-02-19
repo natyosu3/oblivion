@@ -50,6 +50,9 @@ func Engine(r *gin.Engine) *gin.Engine {
 		authGroup.POST("/login", auth.LoginPost())
 		authGroup.GET("/logout", auth.LogoutGet())
 
+		authGroup.GET("/discord/login", auth.DiscordLoginGet())
+		authGroup.GET("/callback", auth.DiscordCallbackGet())
+
 		authGroup.GET("/register", auth.RegisterGet())
 		authGroup.POST("/register", auth.RegisterPost())
 	}

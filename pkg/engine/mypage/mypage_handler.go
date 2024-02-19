@@ -1,21 +1,69 @@
 package mypage
 
 import (
+	"log/slog"
 	"net/http"
 
 	"encoding/json"
 	"oblivion/pkg/user"
 
 	"oblivion/pkg/crud"
+	"oblivion/pkg/discord"
 	"time"
 
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
+func getUserInfo(token string) error {
+	tmUserinfo, err := discord.GetUserInfo(token)
+	if err != nil {
+		return err
+	}
+
+	disUserInfo = *tmUserinfo
+	return nil
+}
+
+var disUserInfo discord.UserInfoResponse
+
 func MypageTop() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
+
+		if session.Get("token") != nil {
+			err := getUserInfo(session.Get("token").(string))
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+				return
+			}
+
+			// 存在しなければユーザ情報をDBに登録
+			userid, err := crud.GetUserId(disUserInfo.Username)
+			if err != nil {
+				err = crud.InsertUser(disUserInfo.Username, disUserInfo.Email, "")
+				if err != nil {
+					slog.Error(err.Error())
+					c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+					return
+				}
+			}
+
+			user := user.User{
+				UserId:       userid,
+				UserName:     disUserInfo.Username,
+				Comportement: user.Comportement{Id: "CP-" + userid},
+			}
+			user_json, err := json.Marshal(user)
+			if err != nil {
+				slog.Error(err.Error())
+				c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
+				return
+			}
+
+			session.Set("user", user_json)
+			session.Save()
+		}
 
 		if session.Get("user") == nil {
 			c.Redirect(http.StatusTemporaryRedirect, "/auth/login")

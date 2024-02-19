@@ -1,17 +1,18 @@
 package auth
 
 import (
-	"net/http"
+	"encoding/json"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
-	"oblivion/pkg/crud"
-	"oblivion/pkg/utils/crypto"
-	"oblivion/pkg/user"
-	"encoding/json"
 	"log/slog"
+	"net/http"
+	"oblivion/pkg/crud"
+	"oblivion/pkg/discord"
+	"oblivion/pkg/user"
+	"oblivion/pkg/utils/crypto"
 )
 
-func loginGet (c *gin.Context) {
+func loginGet(c *gin.Context) {
 	session := sessions.Default(c)
 
 	if user := session.Get("user"); user != nil {
@@ -22,7 +23,7 @@ func loginGet (c *gin.Context) {
 	c.HTML(http.StatusOK, "login.html", gin.H{})
 }
 
-func loginPost (c *gin.Context) {
+func loginPost(c *gin.Context) {
 	session := sessions.Default(c)
 
 	username := c.PostForm("username")
@@ -53,9 +54,9 @@ func loginPost (c *gin.Context) {
 	}
 
 	user := user.User{
-		UserId: userid,
-		UserName: username,
-		Comportement: user.Comportement{Id: "CP-" + userid },
+		UserId:       userid,
+		UserName:     username,
+		Comportement: user.Comportement{Id: "CP-" + userid},
 	}
 
 	user_json, err := json.Marshal(user)
@@ -69,4 +70,30 @@ func loginPost (c *gin.Context) {
 	session.Save()
 
 	c.Redirect(http.StatusMovedPermanently, "/mypage")
+}
+
+func discordLoginGet(c *gin.Context) {
+	c.Redirect(http.StatusSeeOther, discord.Oauth2_URL)
+}
+
+func discordCallbackGet(c *gin.Context) {
+	code := c.Query("code")
+	if code == "" {
+		c.JSON(400, gin.H{"message": "code is empty"})
+		return
+	}
+	tmp := "client_id=" + discord.Client_Id + "&client_secret=" + discord.Client_Secret + "&grant_type=authorization_code&code=" + code + "&redirect_uri=http://localhost:8080/auth/callback"
+
+	payload := []byte(tmp)
+	token, err := discord.Oauth2(payload)
+	if err != nil {
+		c.JSON(500, gin.H{"message": "Error oauth2"})
+		return
+	}
+	// セッションに resValue を保存
+	session := sessions.Default(c)
+	session.Set("token", token)
+	session.Save()
+
+	c.Redirect(302, "/mypage")
 }

@@ -23,3 +23,11 @@ func RegisterPost() gin.HandlerFunc {
 func LogoutGet() gin.HandlerFunc {
 	return logoutGet
 }
+
+func DiscordLoginGet() gin.HandlerFunc {
+	return discordLoginGet
+}
+
+func DiscordCallbackGet() gin.HandlerFunc {
+	return discordCallbackGet
+}

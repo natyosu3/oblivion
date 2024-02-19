@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-const Oauth2_URL = "https://discord.com/api/oauth2/authorize?client_id=1209121185405866004&response_type=code&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fauth%2Fcallback&scope=identify+email"
+const Oauth2_URL = "https://discord.com/api/oauth2/authorize?client_id=1209121185405866004&response_type=code&redirect_uri=https%3A%2F%2Foblivion.natyosu.com%2Fauth%2Fcallback&scope=identify+email"
 
 const BASE_API_URL = "https://discordapp.com/api"
 const USER_ENDPOINT = "/users/@me"

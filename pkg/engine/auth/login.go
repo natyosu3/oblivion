@@ -97,3 +97,4 @@ func discordCallbackGet(c *gin.Context) {
 
 	c.Redirect(302, "/mypage")
 }
+

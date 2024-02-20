@@ -21,7 +21,7 @@ var (
 func init() {
 	err := godotenv.Load(".env")
 	if err != nil {
-		slog.Error("Error loading .env file")
+		slog.Error("DB: Error loading .env file")
 	}
 
 	DB_TYPE = os.Getenv("DB_TYPE")

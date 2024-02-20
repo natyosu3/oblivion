@@ -138,8 +138,7 @@ func (s *RediStore) SetMaxAge(v int) {
 }
 
 func dial(network, address, password string) (redis.Conn, error) {
-	c, err := redis.Dial(network, address)
-	redis.DialUseTLS(true)
+	c, err := redis.Dial(network, address, redis.DialUseTLS(true))
 	if err != nil {
 		return nil, err
 	}

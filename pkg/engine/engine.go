@@ -11,7 +11,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/redis"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 )
 
 var (
@@ -20,10 +20,10 @@ var (
 )
 
 func init() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		slog.Error("Error loading .env file")
-	}
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	slog.Error("Error loading .env file")
+	// }
 
 	REDIS_HOST = os.Getenv("REDIS_HOST")
 	REDIS_PASSWORD = os.Getenv("REDIS_PASSWORD")

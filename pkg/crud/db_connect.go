@@ -25,8 +25,6 @@ func init() {
 	// }
 
 	DB_TYPE = os.Getenv("DB_TYPE")
-
-	slog.Info("DB_TYPE: ", DB_TYPE)
 	DB_NAME = os.Getenv("DB_NAME")
 	DB_USERNAME = os.Getenv("DB_USERNAME")
 	DB_PASSWORD = os.Getenv("DB_PASSWORD")

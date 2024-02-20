@@ -43,10 +43,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/gin-contrib/sessions v0.0.5 => ./gin-sessions
-
 replace github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff => ./redistore
 
 replace github.com/natyosu3/redigo v0.0.0 => ./redigo
-
-replace github.com/gin-contrib/sessions => ./gin-sessions

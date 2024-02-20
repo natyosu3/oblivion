@@ -82,7 +82,7 @@ func discordCallbackGet(c *gin.Context) {
 		c.JSON(400, gin.H{"message": "code is empty"})
 		return
 	}
-	tmp := "client_id=" + discord.Client_Id + "&client_secret=" + discord.Client_Secret + "&grant_type=authorization_code&code=" + code + "&redirect_uri=http://localhost:8080/auth/callback"
+	tmp := "client_id=" + discord.Client_Id + "&client_secret=" + discord.Client_Secret + "&grant_type=authorization_code&code=" + code + "&redirect_uri=https://oblivion.natyosu.com/auth/callback"
 
 	payload := []byte(tmp)
 	token, err := discord.Oauth2(payload)

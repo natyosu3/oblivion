@@ -15,7 +15,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/natyosu3/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 )

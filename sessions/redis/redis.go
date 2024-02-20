@@ -5,7 +5,7 @@ import (
 
 	"github.com/boj/redistore"
 	"github.com/gin-contrib/sessions"
-	// "github.com/gomodule/redigo/redis"
+	"github.com/gomodule/redigo/redis"
 )
 
 type Store interface {
@@ -48,13 +48,13 @@ func NewStoreWithDB(size int, network, address, password, DB string, keyPairs ..
 // NewStoreWithPool instantiates a RediStore with a *redis.Pool passed in.
 //
 // Ref: https://godoc.org/github.com/boj/redistore#NewRediStoreWithPool
-// func NewStoreWithPool(pool *redis.Pool, keyPairs ...[]byte) (Store, error) {
-// 	s, err := redistore.NewRediStoreWithPool(pool, keyPairs...)
-// 	if err != nil {
-// 		return nil, err
-// 	}
-// 	return &store{s}, nil
-// }
+func NewStoreWithPool(pool *redis.Pool, keyPairs ...[]byte) (Store, error) {
+	s, err := redistore.NewRediStoreWithPool(pool, keyPairs...)
+	if err != nil {
+		return nil, err
+	}
+	return &store{s}, nil
+}
 
 type store struct {
 	*redistore.RediStore
@@ -66,11 +66,11 @@ func GetRedisStore(s Store) (err error, rediStore *redistore.RediStore) {
 	realStore, ok := s.(*store)
 	if !ok {
 		err = errors.New("unable to get the redis store: Store isn't *store")
-		return err, nil
+		return
 	}
 
 	rediStore = realStore.RediStore
-	return nil, rediStore
+	return
 }
 
 // SetKeyPrefix sets the key prefix in the redis database.

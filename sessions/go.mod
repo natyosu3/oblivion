@@ -1,6 +1,6 @@
 module github.com/gin-contrib/sessions
 
-go 1.18
+go 1.21.4
 
 require (
 	github.com/antonlindstrom/pgstore v0.0.0-20220421113606-e3a6e3fed12a
@@ -63,4 +63,6 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace github.com/gin-contrib/sessions => ./sessions
+replace github.com/boj/redistore v0.0.0-20180917114910-cd5dcc76aeff => ../redistore
+
+replace github.com/gomodule/redigo v2.0.0+incompatible => ../redigo

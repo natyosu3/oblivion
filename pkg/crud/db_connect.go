@@ -2,7 +2,7 @@ package crud
 
 import (
 	"database/sql"
-	"github.com/joho/godotenv"
+	// "github.com/joho/godotenv"
 	"log/slog"
 	"os"
 
@@ -19,12 +19,14 @@ var (
 )
 
 func init() {
-	err := godotenv.Load(".env")
-	if err != nil {
-		slog.Error("DB: Error loading .env file")
-	}
+	// err := godotenv.Load(".env")
+	// if err != nil {
+	// 	slog.Error("DB: Error loading .env file")
+	// }
 
 	DB_TYPE = os.Getenv("DB_TYPE")
+
+	slog.Info("DB_TYPE: ", DB_TYPE)
 	DB_NAME = os.Getenv("DB_NAME")
 	DB_USERNAME = os.Getenv("DB_USERNAME")
 	DB_PASSWORD = os.Getenv("DB_PASSWORD")

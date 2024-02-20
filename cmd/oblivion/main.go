@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	r := gin.Default()
+	gin.SetMode(gin.ReleaseMode)
+	r := gin.New()
 	r = engine.Engine(r)
 
 	r.Run()

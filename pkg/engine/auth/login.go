@@ -16,7 +16,7 @@ func loginGet(c *gin.Context) {
 	session := sessions.Default(c)
 
 	if user := session.Get("user"); user != nil {
-		c.Redirect(http.StatusMovedPermanently, "/mypage")
+		c.Redirect(http.StatusSeeOther, "/mypage")
 		return
 	}
 

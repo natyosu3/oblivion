@@ -19,22 +19,22 @@ var Client_Id string
 var Client_Secret string
 
 type UserInfoResponse struct {
-	Id                     string `json:"id"`
-	Username               string `json:"username"`
-	Avatar                 string `json:"avatar"`
-	Discriminator          string `json:"discriminator"`
-	PublicFlags            int    `json:"public_flags"`
-	Premium_type           int    `json:"premium_type"`
-	Flags                  int    `json:"flags"`
-	Banner                 string `json:"banner"`
-	Accent_color           string `json:"accent_color"`
-	Global_name            string `json:"global_name"`
-	Avatar_decoration_data string `json:"avatar_decoration_data"`
-	Banner_color           string `json:"banner_color"`
-	Mfa_enabled            bool   `json:"mfa_enabled"`
-	Locale                 string `json:"locale"`
-	Email                  string `json:"email"`
-	Verified               bool   `json:"verified"`
+	Id                     string      `json:"id"`
+	Username               string      `json:"username"`
+	Avatar                 string      `json:"avatar"`
+	Discriminator          string      `json:"discriminator"`
+	PublicFlags            int         `json:"public_flags"`
+	Premium_type           int         `json:"premium_type"`
+	Flags                  int         `json:"flags"`
+	Banner                 string      `json:"banner"`
+	Accent_color           string      `json:"accent_color"`
+	Global_name            string      `json:"global_name"`
+	Avatar_decoration_data interface{} `json:"avatar_decoration_data"`
+	Banner_color           string      `json:"banner_color"`
+	Mfa_enabled            bool        `json:"mfa_enabled"`
+	Locale                 string      `json:"locale"`
+	Email                  string      `json:"email"`
+	Verified               bool        `json:"verified"`
 }
 
 type GuildsInfoResponse struct {

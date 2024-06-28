@@ -1,32 +1,25 @@
 package component
 
 import (
-	"encoding/json"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"oblivion/pkg/crud"
-	"oblivion/pkg/user"
+	"oblivion/pkg/model"
+	"oblivion/pkg/session"
+
+	"github.com/gin-gonic/gin"
 )
 
 func deleteComponentPost(c *gin.Context) {
-	session := sessions.Default(c)
+	data := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
 
-	if session.Get("user") == nil {
+	if data == nil {
 		c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 		return
 	}
 
-	user := user.User{}
-	if err := json.Unmarshal(session.Get("user").([]byte), &user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": err.Error(),
-		})
-	}
-
 	elementId := c.PostForm("id")
 
-	err := crud.DeleteElement(user.UserId, elementId)
+	err := crud.DeleteElement(data.User.UserId, elementId)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": err.Error(),

@@ -5,26 +5,10 @@ import (
 	"oblivion/pkg/engine/component"
 	"oblivion/pkg/engine/mypage"
 	"oblivion/pkg/engine/top"
-	"os"
 
 	"github.com/gin-gonic/gin"
 	// "github.com/joho/godotenv"
 )
-
-var (
-	REDIS_HOST     string
-	REDIS_PASSWORD string
-)
-
-func init() {
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	slog.Error("Error loading .env file")
-	// }
-
-	REDIS_HOST = os.Getenv("REDIS_HOST")
-	REDIS_PASSWORD = os.Getenv("REDIS_PASSWORD")
-}
 
 func Engine(r *gin.Engine) *gin.Engine {
 	r.LoadHTMLGlob("web/templates/*/*.html")

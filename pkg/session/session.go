@@ -4,17 +4,22 @@ import (
 	"encoding/json"
 	"log/slog"
 	"oblivion/pkg/utils/general"
+	"os"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	"github.com/redis/go-redis/v9"
 )
 
 var client *redis.Client
 
 func init() {
-
-	REDIS_HOST := "redis:6379"
+	err := godotenv.Load()
+	if err != nil {
+		slog.Info("【REDIS】This is a Production Environment")
+	}
+	REDIS_HOST := os.Getenv("REDIS_HOST")
 
 	client = redis.NewClient(&redis.Options{
 		Addr: REDIS_HOST,

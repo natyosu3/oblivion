@@ -19,6 +19,5 @@ func Index() gin.HandlerFunc {
 		c.HTML(200, "index.html", gin.H{
 			"IsAuthenticated": true,
 		})
-		return
 	}
 }

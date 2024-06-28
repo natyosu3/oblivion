@@ -10,9 +10,9 @@ import (
 )
 
 func editComponentGet(c *gin.Context) {
-	data := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
+	data, ok := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
 
-	if data == nil {
+	if data == nil || !ok {
 		c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 		return
 	}
@@ -29,9 +29,9 @@ func editComponentGet(c *gin.Context) {
 }
 
 func editComponentPost(c *gin.Context) {
-	data := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
+	data, ok := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
 
-	if data == nil {
+	if data == nil || !ok {
 		c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 		return
 	}

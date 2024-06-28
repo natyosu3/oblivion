@@ -29,10 +29,10 @@ var disUserInfo discord.UserInfoResponse
 
 func MypageTop() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		data := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
+		data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
 		if data != nil {
-			err := getUserInfo(data.Token)
+			err := getUserInfo(data.(*model.Session_model).Token)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
@@ -57,7 +57,7 @@ func MypageTop() gin.HandlerFunc {
 					UserName:     disUserInfo.Username,
 					Comportement: model.Comportement{Id: "CP-" + userid},
 				},
-				Token: data.Token,
+				Token: data.(*model.Session_model).Token,
 			}
 			// セッション情報を更新
 			session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
@@ -69,7 +69,7 @@ func MypageTop() gin.HandlerFunc {
 		}
 
 		// 24時間以内にリマインドがある要素を取得する
-		elements, err := crud.GetListElement(data.User.UserId)
+		elements, err := crud.GetListElement(data.(*model.Session_model).User.UserId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
@@ -97,7 +97,7 @@ func MypageTop() gin.HandlerFunc {
 		}
 
 		c.HTML(http.StatusOK, "mypage.html", gin.H{
-			"user":            data.User,
+			"user":            data.(*model.Session_model).User,
 			"elements":        doElements,
 			"expiredElements": expiredElement,
 			"IsAuthenticated": true,

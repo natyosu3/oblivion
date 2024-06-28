@@ -4,17 +4,17 @@ import (
 	"net/http"
 	"oblivion/pkg/crud"
 
+	"oblivion/pkg/model"
+	"oblivion/pkg/session"
 	"oblivion/pkg/utils/general"
-	"oblivion/pkg/user"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 func cheackComponentPost(c *gin.Context) {
-	session := sessions.Default(c)
+	data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
-	if session.Get("user") == nil {
+	if data == nil {
 		c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 		return
 	}
@@ -31,7 +31,6 @@ func cheackComponentPost(c *gin.Context) {
 		return
 	}
 
-
 	element, err := crud.GetElement(elementId)
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -43,20 +42,20 @@ func cheackComponentPost(c *gin.Context) {
 
 	// memorizationが正なら次回のリマインド日を更新
 	if memorization == "yes" {
-		elem := user.Element{
+		elem := model.Element{
 			Id:        elementId,
 			Name:      element.Name,
 			Content:   element.Content,
-			Remind:	   general.MakeNextRemindDate(element.Frequency),
+			Remind:    general.MakeNextRemindDate(element.Frequency),
 			Frequency: element.Frequency + 1,
 		}
 		err = crud.UpdateElement(elem)
 	} else {
-		elem := user.Element{
+		elem := model.Element{
 			Id:        elementId,
 			Name:      element.Name,
 			Content:   element.Content,
-			Remind:	   element.Remind,
+			Remind:    element.Remind,
 			Frequency: element.Frequency,
 		}
 		err = crud.UpdateElement(elem)

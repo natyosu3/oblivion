@@ -2,15 +2,15 @@ package auth
 
 import (
 	"errors"
-	"github.com/gin-contrib/sessions"
+
 	"github.com/gin-gonic/gin"
 
-	"encoding/json"
 	"log/slog"
 	"net/http"
 	"oblivion/pkg/crud"
 	"oblivion/pkg/error_handler"
-	"oblivion/pkg/user"
+	"oblivion/pkg/model"
+	"oblivion/pkg/session"
 	"oblivion/pkg/utils/crypto"
 )
 
@@ -19,8 +19,6 @@ func registerGet(c *gin.Context) {
 }
 
 func registerPost(c *gin.Context) {
-	session := sessions.Default(c)
-
 	username := c.PostForm("username")
 	email := c.PostForm("email")
 	password := c.PostForm("password")
@@ -56,23 +54,19 @@ func registerPost(c *gin.Context) {
 		return
 	}
 
-	user := user.User{
-		UserId:       userid,
-		UserName:     username,
-		EmailAddress: email,
-		Comportement: user.Comportement{Id: "CP-" + userid},
+	// ユーザ情報をセッションに保存
+	se_data := model.Session_model{
+		SessionId: "",
+		CookieKey: "session",
+		User: model.User{
+			UserId:       userid,
+			UserName:     username,
+			Comportement: model.Comportement{Id: "CP-" + userid},
+		},
+		Token: "",
 	}
 
-	user_json, err := json.Marshal(user)
-	if err != nil {
-		slog.Error(err.Error())
-		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
-		return
-	}
-
-	// クッキーにログイン情報をセット
-	session.Set("user", user_json)
-	session.Save()
+	session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
 
 	// リダイレクト
 	c.Redirect(http.StatusSeeOther, "/mypage")

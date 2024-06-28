@@ -2,15 +2,14 @@ package auth
 
 import (
 	"net/http"
-	"github.com/gin-contrib/sessions"
+	"oblivion/pkg/model"
+	"oblivion/pkg/session"
+
 	"github.com/gin-gonic/gin"
 )
 
 func logoutGet(c *gin.Context) {
-	session := sessions.Default(c)
-
-	session.Clear()
-	session.Save()
+	session.Default(c, "session", &model.Session_model{}).Delete(c)
 
 	c.Redirect(http.StatusSeeOther, "/auth/login")
 }

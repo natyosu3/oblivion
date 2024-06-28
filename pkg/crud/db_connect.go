@@ -6,6 +6,7 @@ import (
 	"log/slog"
 	"os"
 
+	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
 
@@ -19,10 +20,10 @@ var (
 )
 
 func init() {
-	// err := godotenv.Load(".env")
-	// if err != nil {
-	// 	slog.Error("DB: Error loading .env file")
-	// }
+	err := godotenv.Load()
+	if err != nil {
+		slog.Info("【DB】This is a Production Environment")
+	}
 
 	DB_TYPE = os.Getenv("DB_TYPE")
 	DB_NAME = os.Getenv("DB_NAME")
@@ -37,7 +38,7 @@ func Connect() *sql.DB {
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		slog.Error("failed to connect database", err)
+		slog.Error("failed to connect database:" + err.Error())
 	}
 
 	return db

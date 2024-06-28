@@ -4,14 +4,14 @@ import (
 	"log/slog"
 	"net/http"
 
-	"encoding/json"
-	"oblivion/pkg/user"
+	"oblivion/pkg/model"
 
 	"oblivion/pkg/crud"
 	"oblivion/pkg/discord"
 	"time"
 
-	"github.com/gin-contrib/sessions"
+	"oblivion/pkg/session"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -29,10 +29,10 @@ var disUserInfo discord.UserInfoResponse
 
 func MypageTop() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		session := sessions.Default(c)
+		data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
-		if session.Get("token") != nil {
-			err := getUserInfo(session.Get("token").(string))
+		if data != nil {
+			err := getUserInfo(data.(*model.Session_model).Token)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 				return
@@ -49,41 +49,34 @@ func MypageTop() gin.HandlerFunc {
 				}
 			}
 
-			user := user.User{
-				UserId:       userid,
-				UserName:     disUserInfo.Username,
-				Comportement: user.Comportement{Id: "CP-" + userid},
+			se_data := model.Session_model{
+				SessionId: "",
+				CookieKey: "session",
+				User: model.User{
+					UserId:       userid,
+					UserName:     disUserInfo.Username,
+					Comportement: model.Comportement{Id: "CP-" + userid},
+				},
+				Token: data.(*model.Session_model).Token,
 			}
-			user_json, err := json.Marshal(user)
-			if err != nil {
-				slog.Error(err.Error())
-				c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
-				return
-			}
-
-			session.Set("user", user_json)
-			session.Save()
+			// セッション情報を更新
+			session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
 		}
 
-		if session.Get("user") == nil {
+		if data == nil {
 			c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 			return
 		}
 
-		userinfo := user.User{}
-		if err := json.Unmarshal(session.Get("user").([]byte), &userinfo); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		}
-
 		// 24時間以内にリマインドがある要素を取得する
-		elements, err := crud.GetListElement(userinfo.UserId)
+		elements, err := crud.GetListElement(data.(*model.Session_model).User.UserId)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return
 		}
 
-		doElements := []user.Element{}
-		expiredElement := []user.Element{}
+		doElements := []model.Element{}
+		expiredElement := []model.Element{}
 		for _, element := range elements {
 			// リマインド日時が24時間以内の要素を取得する
 			remindTime, err := time.ParseInLocation("2006-01-02 15:04:05", element.Remind, time.Local)
@@ -104,7 +97,7 @@ func MypageTop() gin.HandlerFunc {
 		}
 
 		c.HTML(http.StatusOK, "mypage.html", gin.H{
-			"user":            userinfo,
+			"user":            data.(*model.Session_model).User,
 			"elements":        doElements,
 			"expiredElements": expiredElement,
 			"IsAuthenticated": true,

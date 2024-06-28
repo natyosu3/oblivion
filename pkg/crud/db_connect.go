@@ -37,7 +37,7 @@ func Connect() *sql.DB {
 
 	db, err := sql.Open("postgres", dsn)
 	if err != nil {
-		slog.Error("failed to connect database", err)
+		slog.Error("failed to connect database:" + err.Error())
 	}
 
 	return db

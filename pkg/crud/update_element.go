@@ -2,10 +2,10 @@ package crud
 
 import (
 	"oblivion/pkg/error_handler"
-	"oblivion/pkg/user"
+	"oblivion/pkg/model"
 )
 
-func UpdateElement(element user.Element) error {
+func UpdateElement(element model.Element) error {
 	db := Connect()
 	defer db.Close()
 

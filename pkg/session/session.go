@@ -21,10 +21,8 @@ func init() {
 	}
 	REDIS_HOST := os.Getenv("REDIS_HOST")
 
-	client = redis.NewClient(&redis.Options{
-		Addr: REDIS_HOST,
-		DB:   0,
-	})
+	opt, _ := redis.ParseURL(REDIS_HOST)
+	client = redis.NewClient(opt)
 
 	if _, err := client.Ping(&gin.Context{}).Result(); err != nil {
 		slog.Error("Error connecting to redis: " + err.Error())

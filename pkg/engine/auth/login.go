@@ -1,21 +1,22 @@
 package auth
 
 import (
-	"encoding/json"
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-gonic/gin"
 	"log/slog"
 	"net/http"
 	"oblivion/pkg/crud"
 	"oblivion/pkg/discord"
+	"oblivion/pkg/session"
 	"oblivion/pkg/user"
 	"oblivion/pkg/utils/crypto"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 )
 
 func loginGet(c *gin.Context) {
-	session := sessions.Default(c)
+	data := session.Default(c, "session", &user.User{}).Get(c)
 
-	if user := session.Get("user"); user != nil {
+	if data != nil {
 		c.Redirect(http.StatusSeeOther, "/mypage")
 		return
 	}
@@ -24,8 +25,6 @@ func loginGet(c *gin.Context) {
 }
 
 func loginPost(c *gin.Context) {
-	session := sessions.Default(c)
-
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
@@ -53,21 +52,14 @@ func loginPost(c *gin.Context) {
 		return
 	}
 
-	user := user.User{
+	se_data := user.User{
 		UserId:       userid,
 		UserName:     username,
 		Comportement: user.Comportement{Id: "CP-" + userid},
 	}
 
-	user_json, err := json.Marshal(user)
-	if err != nil {
-		slog.Error(err.Error())
-		c.HTML(http.StatusInternalServerError, "login.html", gin.H{"error": "内部サーバーエラーが発生しました."})
-		return
-	}
-
-	session.Set("user", user_json)
-	session.Save()
+	// セッションを設定(cookieにセット)
+	session.Default(c, "session", &user.User{}).Set(c, se_data)
 
 	c.Redirect(http.StatusMovedPermanently, "/mypage")
 }
@@ -97,4 +89,3 @@ func discordCallbackGet(c *gin.Context) {
 
 	c.Redirect(302, "/mypage")
 }
-

@@ -31,7 +31,7 @@ func MypageTop() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
-		if data != nil {
+		if data.(*model.Session_model).Token != "" {
 			err := getUserInfo(data.(*model.Session_model).Token)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

@@ -1,27 +1,20 @@
 package component
 
 import (
-	"encoding/json"
 	"net/http"
 	"oblivion/pkg/crud"
-	"oblivion/pkg/user"
+	"oblivion/pkg/model"
+	"oblivion/pkg/session"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
-
 func editComponentGet(c *gin.Context) {
-	session := sessions.Default(c)
+	data, ok := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
 
-	if session.Get("user") == nil {
+	if data == nil || !ok {
 		c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 		return
-	}
-
-	user := user.User{}
-	if err := json.Unmarshal(session.Get("user").([]byte), &user); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	element, err := crud.GetElement(c.Param("id"))
@@ -36,16 +29,11 @@ func editComponentGet(c *gin.Context) {
 }
 
 func editComponentPost(c *gin.Context) {
-	session := sessions.Default(c)
+	data, ok := session.Default(c, "session", &model.Session_model{}).Get(c).(*model.Session_model)
 
-	if session.Get("user") == nil {
+	if data == nil || !ok {
 		c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
 		return
-	}
-
-	userinfo := user.User{}
-	if err := json.Unmarshal(session.Get("user").([]byte), &userinfo); err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
 	element, err := crud.GetElement(c.Param("id"))
@@ -53,14 +41,13 @@ func editComponentPost(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 	}
 
-	elem := user.Element{
+	elem := model.Element{
 		Id:        c.PostForm("id"),
 		Name:      c.PostForm("name"),
 		Content:   c.PostForm("content"),
 		Remind:    element.Remind,
 		Frequency: element.Frequency,
 	}
-	
 
 	err = crud.UpdateElement(elem)
 	if err != nil {

@@ -1,15 +1,16 @@
 package top
 
 import (
+	"oblivion/pkg/model"
+	"oblivion/pkg/session"
+
 	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/sessions"
 )
 
-
 func Index() gin.HandlerFunc {
-	return func (c *gin.Context)  {
-		session := sessions.Default(c)
-		if user := session.Get("user"); user == nil {
+	return func(c *gin.Context) {
+		data := session.Default(c, "session", &model.Session_model{}).Get(c)
+		if data == nil {
 			c.HTML(200, "index.html", gin.H{
 				"IsAuthenticated": false,
 			})
@@ -18,6 +19,5 @@ func Index() gin.HandlerFunc {
 		c.HTML(200, "index.html", gin.H{
 			"IsAuthenticated": true,
 		})
-		return
 	}
 }

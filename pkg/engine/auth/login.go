@@ -5,16 +5,15 @@ import (
 	"net/http"
 	"oblivion/pkg/crud"
 	"oblivion/pkg/discord"
+	"oblivion/pkg/model"
 	"oblivion/pkg/session"
-	"oblivion/pkg/user"
 	"oblivion/pkg/utils/crypto"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 )
 
 func loginGet(c *gin.Context) {
-	data := session.Default(c, "session", &user.User{}).Get(c)
+	data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
 	if data != nil {
 		c.Redirect(http.StatusSeeOther, "/mypage")
@@ -52,14 +51,19 @@ func loginPost(c *gin.Context) {
 		return
 	}
 
-	se_data := user.User{
-		UserId:       userid,
-		UserName:     username,
-		Comportement: user.Comportement{Id: "CP-" + userid},
+	se_data := model.Session_model{
+		SessionId: "",
+		CookieKey: "session",
+		User: model.User{
+			UserId:       userid,
+			UserName:     username,
+			Comportement: model.Comportement{Id: "CP-" + userid},
+		},
+		Token: "",
 	}
 
 	// セッションを設定(cookieにセット)
-	session.Default(c, "session", &user.User{}).Set(c, se_data)
+	session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
 
 	c.Redirect(http.StatusMovedPermanently, "/mypage")
 }
@@ -83,9 +87,13 @@ func discordCallbackGet(c *gin.Context) {
 		return
 	}
 	// セッションに resValue を保存
-	session := sessions.Default(c)
-	session.Set("token", token)
-	session.Save()
+	se_data := model.Session_model{
+		SessionId: "",
+		CookieKey: "session",
+		User:      model.User{},
+		Token:     token,
+	}
+	session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
 
 	c.Redirect(302, "/mypage")
 }

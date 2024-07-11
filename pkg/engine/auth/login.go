@@ -65,7 +65,7 @@ func loginPost(c *gin.Context) {
 	// セッションを設定(cookieにセット)
 	session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
 
-	c.Redirect(http.StatusMovedPermanently, "/mypage")
+	c.Redirect(http.StatusSeeOther, "/mypage")
 }
 
 func discordLoginGet(c *gin.Context) {
@@ -95,5 +95,5 @@ func discordCallbackGet(c *gin.Context) {
 	}
 	session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
 
-	c.Redirect(302, "/mypage")
+	c.Redirect(http.StatusSeeOther, "/mypage")
 }

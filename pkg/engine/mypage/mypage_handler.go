@@ -31,6 +31,12 @@ func MypageTop() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
+		// セッション情報が存在しない場合はログイン画面にリダイレクト
+		if data == nil {
+			c.Redirect(http.StatusSeeOther, "/auth/login")
+			return
+		}
+
 		if data.(*model.Session_model).Token != "" {
 			err := getUserInfo(data.(*model.Session_model).Token)
 			if err != nil {
@@ -64,7 +70,7 @@ func MypageTop() gin.HandlerFunc {
 		}
 
 		if data == nil {
-			c.Redirect(http.StatusTemporaryRedirect, "/auth/login")
+			c.Redirect(http.StatusSeeOther, "/auth/login")
 			return
 		}
 

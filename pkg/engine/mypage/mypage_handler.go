@@ -32,7 +32,7 @@ func MypageTop() gin.HandlerFunc {
 		data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
 		// セッション情報が存在しない場合はログイン画面にリダイレクト
-		if data == nil {
+		if data == nil || data.(*model.Session_model).User.UserId == "" {
 			c.Redirect(http.StatusSeeOther, "/auth/login")
 			return
 		}
@@ -67,11 +67,6 @@ func MypageTop() gin.HandlerFunc {
 			}
 			// セッション情報を更新
 			session.Default(c, "session", &model.Session_model{}).Set(c, se_data)
-		}
-
-		if data == nil {
-			c.Redirect(http.StatusSeeOther, "/auth/login")
-			return
 		}
 
 		// 24時間以内にリマインドがある要素を取得する

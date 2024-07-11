@@ -15,7 +15,7 @@ import (
 func loginGet(c *gin.Context) {
 	data := session.Default(c, "session", &model.Session_model{}).Get(c)
 
-	if data != nil {
+	if data != nil && data.(*model.Session_model).User.UserId != "" {
 		c.Redirect(http.StatusSeeOther, "/mypage")
 		return
 	}

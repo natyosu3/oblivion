@@ -26,5 +26,5 @@ func deleteComponentPost(c *gin.Context) {
 		})
 	}
 
-	c.Redirect(http.StatusMovedPermanently, "/component/list")
+	c.Redirect(http.StatusSeeOther, "/component/list")
 }
